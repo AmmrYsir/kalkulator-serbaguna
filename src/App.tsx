@@ -1,13 +1,8 @@
 import type { Component } from 'solid-js';
-import Comp from './Comp';
+import CarLoanCalculator from './components/CarLoanCalculator';
 
 const App: Component = () => {
-  return (
-    <>
-      <h1>Hello world!!!!</h1>
-      <Comp />
-    </>
-  );
+  return <CarLoanCalculator />;
 };
 
 export default App;
