@@ -25,20 +25,64 @@ export interface FormattedResult {
 }
 
 /**
+ * Format number with thousand separators
+ * Example: 1000 → "1,000" or 70000 → "70,000"
+ */
+function formatNumberInput(value: string): string {
+  // Remove all non-digit characters
+  const digitsOnly = value.replace(/\D/g, '');
+  
+  if (!digitsOnly) return '';
+  
+  // Add thousand separators
+  return digitsOnly.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+/**
+ * Remove formatting from display value
+ * Example: "1,000" → "1000"
+ */
+function unformatNumberInput(value: string): string {
+  return value.replace(/,/g, '');
+}
+
+/**
  * Car Loan Calculator Presenter
  * 
  * Provides reactive state management and business coordination
  * using SolidJS signals (not React hooks).
  */
 export function createCarLoanPresenter() {
-  // Input state
-  const [loanAmount, setLoanAmount] = createSignal<string>('');
-  const [interestRate, setInterestRate] = createSignal<string>('');
-  const [loanPeriod, setLoanPeriod] = createSignal<string>('');
+  // Input state (stored as formatted display strings)
+  const [loanAmount, setLoanAmountRaw] = createSignal<string>('');
+  const [interestRate, setInterestRateRaw] = createSignal<string>('');
+  const [loanPeriod, setLoanPeriodRaw] = createSignal<string>('');
 
   // Output state
   const [result, setResult] = createSignal<FormattedResult | null>(null);
   const [errors, setErrors] = createSignal<ValidationError>({});
+
+  /**
+   * Set loan amount with auto-formatting
+   */
+  function setLoanAmount(value: string) {
+    const formatted = formatNumberInput(value);
+    setLoanAmountRaw(formatted);
+  }
+
+  /**
+   * Set interest rate (decimal input, no formatting needed)
+   */
+  function setInterestRate(value: string) {
+    setInterestRateRaw(value);
+  }
+
+  /**
+   * Set loan period (integer input, no formatting needed)
+   */
+  function setLoanPeriod(value: string) {
+    setLoanPeriodRaw(value);
+  }
 
   /**
    * Validate user inputs
@@ -47,7 +91,7 @@ export function createCarLoanPresenter() {
   function validateInputs(): boolean {
     const validationErrors: ValidationError = {};
 
-    const amount = parseFloat(loanAmount());
+    const amount = parseFloat(unformatNumberInput(loanAmount()));
     const rate = parseFloat(interestRate());
     const period = parseFloat(loanPeriod());
 
@@ -91,9 +135,9 @@ export function createCarLoanPresenter() {
       return;
     }
 
-    // Prepare data for Model
+    // Prepare data for Model (unformat the loan amount)
     const loanData: LoanData = {
-      loanAmount: parseFloat(loanAmount()),
+      loanAmount: parseFloat(unformatNumberInput(loanAmount())),
       interestRate: parseFloat(interestRate()),
       loanPeriod: parseFloat(loanPeriod()),
     };

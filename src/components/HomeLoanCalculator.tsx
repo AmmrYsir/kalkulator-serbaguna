@@ -30,7 +30,7 @@ const HomeLoanCalculator: Component = () => {
             <span class="input-prefix">RM</span>
             <input
               id="home-loan-amount"
-              type="number"
+              type="text"
               placeholder="400,000"
               value={presenter.loanAmount()}
               onInput={(e) => presenter.setLoanAmount(e.currentTarget.value)}
