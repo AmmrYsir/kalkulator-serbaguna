@@ -1,6 +1,7 @@
 import { Component, createSignal, Show, JSX } from 'solid-js';
 import CarLoanCalculator from './components/CarLoanCalculator';
 import HomeLoanCalculator from './components/HomeLoanCalculator';
+import Sidebar, { CalculatorIcon, CloseIcon } from './components/Sidebar';
 
 type TabType = 'car' | 'home';
 
@@ -44,39 +45,54 @@ const HomeIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
 
 const App: Component = () => {
   const [activeTab, setActiveTab] = createSignal<TabType>('car');
+  const [sidebarOpen, setSidebarOpen] = createSignal(false);
 
   return (
-    <div class="app-container">
-      {/* Tab Navigation */}
-      <nav class="tabs-container" role="tablist" aria-label="Calculator type">
-        <button
-          role="tab"
-          aria-selected={activeTab() === 'car'}
-          onClick={() => setActiveTab('car')}
-          class={`tab-btn ${activeTab() === 'car' ? 'active' : ''}`}
-        >
-          <CarIcon aria-hidden="true" />
-          Car Loan
-        </button>
-        <button
-          role="tab"
-          aria-selected={activeTab() === 'home'}
-          onClick={() => setActiveTab('home')}
-          class={`tab-btn ${activeTab() === 'home' ? 'active' : ''}`}
-        >
-          <HomeIcon aria-hidden="true" />
-          Home Loan
-        </button>
-      </nav>
+    <>
+      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <div class="app-container">
+        {/* Tab Navigation */}
+        <div class="tabs-wrapper">
+          <nav class="tabs-container" role="tablist" aria-label="Calculator type">
+            <button
+              role="tab"
+              aria-selected={activeTab() === 'car'}
+              onClick={() => setActiveTab('car')}
+              class={`tab-btn ${activeTab() === 'car' ? 'active' : ''}`}
+            >
+              <CarIcon aria-hidden="true" />
+              Car Loan
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTab() === 'home'}
+              onClick={() => setActiveTab('home')}
+              class={`tab-btn ${activeTab() === 'home' ? 'active' : ''}`}
+            >
+              <HomeIcon aria-hidden="true" />
+              Home Loan
+            </button>
+          </nav>
+          <button
+            class="calc-menu-btn"
+            onClick={() => setSidebarOpen(!sidebarOpen())}
+            aria-label="Toggle calculator menu"
+          >
+            <Show when={!sidebarOpen()} fallback={<CloseIcon />}>
+              <CalculatorIcon />
+            </Show>
+          </button>
+        </div>
 
-      {/* Tab Content */}
-      <Show when={activeTab() === 'car'}>
-        <CarLoanCalculator />
-      </Show>
-      <Show when={activeTab() === 'home'}>
-        <HomeLoanCalculator />
-      </Show>
-    </div>
+        {/* Tab Content */}
+        <Show when={activeTab() === 'car'}>
+          <CarLoanCalculator />
+        </Show>
+        <Show when={activeTab() === 'home'}>
+          <HomeLoanCalculator />
+        </Show>
+      </div>
+    </>
   );
 };
 
