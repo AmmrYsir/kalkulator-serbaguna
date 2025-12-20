@@ -296,16 +296,25 @@ h1 {
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
   text-align: right;
-  font-size: 1.5rem;
-  font-weight: 600;
   font-variant-numeric: tabular-nums;
   margin-bottom: var(--space-4);
-  height: 60px;
+  min-height: 60px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: flex-end;
+  gap: var(--space-1);
   word-break: break-all;
-  overflow: hidden;
+}
+
+.calc-expression-text {
+  font-size: var(--text-sm);
+  color: var(--gray-400);
+  opacity: 0.8;
+}
+
+.calc-main-display {
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .sidebar-calc-grid {

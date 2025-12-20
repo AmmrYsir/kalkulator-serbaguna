@@ -58,6 +58,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
 
   // Calculator state
   const [display, setDisplay] = createSignal('0');
+  const [expression, setExpression] = createSignal('');
   const [previousValue, setPreviousValue] = createSignal<number | null>(null);
   const [operation, setOperation] = createSignal<string | null>(null);
   const [newNumber, setNewNumber] = createSignal(true);
@@ -66,24 +67,56 @@ const Sidebar: Component<SidebarProps> = (props) => {
 
   // Calculator functions
   const handleNumber = (num: string) => {
-    setNewNumber(false);
-    setDisplay((prev) => (prev === '0' ? num : prev + num));
+    if (newNumber()) {
+      setDisplay(num);
+      setNewNumber(false);
+    } else {
+      setDisplay((prev) => (prev === '0' ? num : prev + num));
+    }
   };
 
   const handleDecimal = () => {
-    if (!display().includes('.')) {
-      setDisplay((prev) => prev + '.');
+    if (newNumber()) {
+      setDisplay('0.');
       setNewNumber(false);
+    } else if (!display().includes('.')) {
+      setDisplay((prev) => prev + '.');
     }
   };
 
   const handleOperation = (op: string) => {
     const currentValue = parseFloat(display());
+    const displayOp = op === '*' ? '×' : op === '/' ? '÷' : op;
 
+    // If there's a previous operation and we've entered a new number, calculate first
     if (previousValue() !== null && !newNumber() && operation()) {
-      handleEquals();
+      const previous = previousValue()!;
+      const currentOp = operation()!;
+      
+      let result = 0;
+      switch (currentOp) {
+        case '+':
+          result = previous + currentValue;
+          break;
+        case '-':
+          result = previous - currentValue;
+          break;
+        case '*':
+          result = previous * currentValue;
+          break;
+        case '/':
+          result = currentValue !== 0 ? previous / currentValue : 0;
+          break;
+      }
+
+      const formatted =
+        result % 1 === 0 ? result.toString() : result.toFixed(10).replace(/\.?0+$/, '');
+      setDisplay(formatted);
+      setPreviousValue(result);
+      setExpression(`${formatted} ${displayOp}`);
     } else {
       setPreviousValue(currentValue);
+      setExpression(`${display()} ${displayOp}`);
     }
 
     setOperation(op);
@@ -96,6 +129,8 @@ const Sidebar: Component<SidebarProps> = (props) => {
     const op = operation();
 
     if (previous === null || op === null) return;
+
+    const displayOp = op === '*' ? '×' : op === '/' ? '÷' : op;
 
     let result = 0;
     switch (op) {
@@ -115,6 +150,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
 
     const formatted =
       result % 1 === 0 ? result.toString() : result.toFixed(10).replace(/\.?0+$/, '');
+    setExpression(`${expression()} ${display()} =`);
     setDisplay(formatted);
     setPreviousValue(null);
     setOperation(null);
@@ -123,6 +159,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
 
   const handleClear = () => {
     setDisplay('0');
+    setExpression('');
     setPreviousValue(null);
     setOperation(null);
     setNewNumber(true);
@@ -150,8 +187,13 @@ const Sidebar: Component<SidebarProps> = (props) => {
         <div class="sidebar-calculator">
           <h3 class="sidebar-calc-title">Quick Calculator</h3>
 
-          {/* Display */}
-          <div class="sidebar-calc-display">{display()}</div>
+          {/* Display with Expression */}
+          <div class="sidebar-calc-display">
+            <Show when={expression()}>
+              <div class="calc-expression-text">{expression()}</div>
+            </Show>
+            <div class="calc-main-display">{display()}</div>
+          </div>
 
           {/* Buttons Grid */}
           <div class="sidebar-calc-grid">
