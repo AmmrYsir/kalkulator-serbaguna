@@ -1,98 +1,96 @@
-import { Component, createSignal, Show, JSX } from 'solid-js';
-import CarLoanCalculator from './components/CarLoanCalculator';
-import HomeLoanCalculator from './components/HomeLoanCalculator';
-import Sidebar, { CalculatorIcon, CloseIcon } from './components/Sidebar';
+import { Component, createSignal, Show, onMount } from 'solid-js';
 
-type TabType = 'car' | 'home';
+import { DarkModeProvider } from './context/DarkModeContext';
+import Header from './components/layout/Header';
+import Sidebar, { CalculatorType } from './components/layout/Sidebar';
+import PageTransition from './components/ui/PageTransition';
 
-// Icon Components - Clean, minimal SVG icons
-const CarIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    {...props}
-  >
-    <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-3.4-4.9a2 2 0 0 0-1.6-.9H7a2 2 0 0 0-1.6.8L2 10l-1.5 1.1C.2 11.4 0 11.9 0 12.5V16c0 .6.4 1 1 1h2" />
-    <circle cx="7" cy="17" r="2" />
-    <circle cx="17" cy="17" r="2" />
-  </svg>
-);
-
-const HomeIcon = (props: JSX.SvgSVGAttributes<SVGSVGElement>) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    {...props}
-  >
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-    <polyline points="9 22 9 12 15 12 15 22" />
-  </svg>
-);
+import CarLoanCalculator from './components/calculators/CarLoanCalculator';
+import HomeLoanCalculator from './components/calculators/HomeLoanCalculator';
+import TipCalculator from './components/calculators/TipCalculator';
+import SalaryCalculator from './components/calculators/SalaryCalculator';
+import BMICalculator from './components/calculators/BMICalculator';
+import BMRCalculator from './components/calculators/BMRCalculator';
+import UnitConverter from './components/calculators/UnitConverter';
+import CurrencyConverter from './components/calculators/CurrencyConverter';
+import QuickCalculator from './components/calculators/QuickCalculator';
 
 const App: Component = () => {
-  const [activeTab, setActiveTab] = createSignal<TabType>('car');
   const [sidebarOpen, setSidebarOpen] = createSignal(false);
+  const [activeCalculator, setActiveCalculator] = createSignal<CalculatorType>('car-loan');
+  const [touchStart, setTouchStart] = createSignal<number | null>(null);
+
+  onMount(() => {
+    document.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchend', handleTouchEnd);
+  });
+
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    const start = touchStart();
+    if (start === null) return;
+    
+    const end = e.changedTouches[0].clientX;
+    const diff = start - end;
+    
+    if (diff < -50 && !sidebarOpen()) {
+      setSidebarOpen(true);
+    } else if (diff > 50 && sidebarOpen()) {
+      setSidebarOpen(false);
+    }
+    
+    setTouchStart(null);
+  };
+
+  const renderCalculator = () => {
+    switch (activeCalculator()) {
+      case 'car-loan':
+        return <CarLoanCalculator />;
+      case 'home-loan':
+        return <HomeLoanCalculator />;
+      case 'tip':
+        return <TipCalculator />;
+      case 'salary':
+        return <SalaryCalculator />;
+      case 'bmi':
+        return <BMICalculator />;
+      case 'bmr':
+        return <BMRCalculator />;
+      case 'unit':
+        return <UnitConverter />;
+      case 'currency':
+        return <CurrencyConverter />;
+      case 'quick':
+        return <QuickCalculator />;
+      default:
+        return <CarLoanCalculator />;
+    }
+  };
 
   return (
-    <>
-      <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-      <div class="app-container">
-        {/* Tab Navigation */}
-        <div class="tabs-wrapper">
-          <nav class="tabs-container" role="tablist" aria-label="Calculator type">
-            <button
-              role="tab"
-              aria-selected={activeTab() === 'car'}
-              onClick={() => setActiveTab('car')}
-              class={`tab-btn ${activeTab() === 'car' ? 'active' : ''}`}
-            >
-              <CarIcon aria-hidden="true" />
-              Car Loan
-            </button>
-            <button
-              role="tab"
-              aria-selected={activeTab() === 'home'}
-              onClick={() => setActiveTab('home')}
-              class={`tab-btn ${activeTab() === 'home' ? 'active' : ''}`}
-            >
-              <HomeIcon aria-hidden="true" />
-              Home Loan
-            </button>
-          </nav>
-          <button
-            class="calc-menu-btn"
-            onClick={() => setSidebarOpen(!sidebarOpen())}
-            aria-label="Toggle calculator menu"
-          >
-            <Show when={!sidebarOpen()} fallback={<CloseIcon />}>
-              <CalculatorIcon />
-            </Show>
-          </button>
-        </div>
-
-        {/* Tab Content */}
-        <Show when={activeTab() === 'car'}>
-          <CarLoanCalculator />
-        </Show>
-        <Show when={activeTab() === 'home'}>
-          <HomeLoanCalculator />
-        </Show>
+    <DarkModeProvider>
+      <div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+        <Header onMenuClick={() => setSidebarOpen(!sidebarOpen())} />
+        
+        <Sidebar
+          isOpen={sidebarOpen()}
+          onClose={() => setSidebarOpen(false)}
+          activeCalculator={activeCalculator()}
+          onSelect={(type) => setActiveCalculator(type)}
+        />
+        
+        <main class="pt-20 pb-8 px-4 lg:pl-[280px]">
+          <div class="max-w-lg mx-auto animate-fade-in">
+            <div class="animate-slide-up">
+              {renderCalculator()}
+            </div>
+          </div>
+        </main>
       </div>
-    </>
+    </DarkModeProvider>
   );
 };
 
