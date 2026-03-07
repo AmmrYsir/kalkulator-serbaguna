@@ -1,4 +1,4 @@
-import { Component, createSignal, Show } from 'solid-js';
+import { Component, createSignal, Show, For } from 'solid-js';
 
 interface TipResult {
   tipAmount: number;
@@ -79,7 +79,7 @@ const TipCalculator: Component = () => {
             </label>
             <div class="grid grid-cols-5 gap-2">
               <For each={presetTips}>
-                {(percent) => (
+                {(percent: number) => (
                   <button
                     onClick={() => {
                       setTipPercent(percent);
@@ -88,7 +88,7 @@ const TipCalculator: Component = () => {
                     class={`py-2 rounded-xl text-xs font-black font-mono transition-all duration-200 ${
                       tipPercent() === percent
                         ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700'
                     }`}
                   >
                     {percent}%
