@@ -37,32 +37,34 @@ const Header: Component<HeaderProps> = (props) => {
 	const { isDark, toggle } = useDarkMode();
 
 	return (
-		<header class="fixed top-0 left-0 right-0 h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-50 flex items-center justify-between px-4 lg:px-6">
-			<div class="flex items-center gap-3">
+		<header class="fixed top-0 left-0 right-0 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 z-50 flex items-center justify-between px-4 lg:px-8">
+			<div class="flex items-center gap-4">
 				<button
 					onClick={props.onMenuClick}
-					class="lg:hidden p-2 -ml-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+					class="lg:hidden p-2 -ml-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
 					aria-label="Open menu"
 				>
 					<MenuIcon />
 				</button>
 
-				<div class="flex items-center gap-2">
-					<div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center">
-						<span class="text-white font-bold text-sm">K</span>
+				<div class="flex items-center gap-3">
+					<div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+						<span class="text-white font-black text-xl font-mono">K</span>
 					</div>
 					<div class="hidden sm:block">
-						<h1 class="text-lg font-semibold text-slate-900 dark:text-white">Kalkulator Serbaguna</h1>
+						<h1 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white font-mono">
+							KALKULATOR <span class="text-blue-600 dark:text-blue-400">SERBAGUNA</span>
+						</h1>
 					</div>
 				</div>
 			</div>
 
 			<button
 				onClick={toggle}
-				class="relative p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+				class="relative p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-200"
 				aria-label="Toggle dark mode"
 			>
-				<div class="transition-transform duration-200 dark:rotate-90 rotate-0">
+				<div class="transition-transform duration-300 dark:rotate-0 rotate-12 scale-100 active:scale-90">
 					<Show when={isDark()} fallback={<MoonIcon />}>
 						<SunIcon />
 					</Show>
@@ -73,3 +75,4 @@ const Header: Component<HeaderProps> = (props) => {
 };
 
 export default Header;
+

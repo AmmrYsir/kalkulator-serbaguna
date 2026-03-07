@@ -107,36 +107,36 @@ const QuickCalculator: Component = () => {
 
 	return (
 		<div class="max-w-md mx-auto">
-			<div class="mb-6">
-				<h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-1">
-					Kalkulator
+			<div class="mb-8">
+				<h2 class="text-3xl font-black text-slate-900 dark:text-white mb-2 tracking-tight font-mono uppercase">
+					KALKULATOR
 				</h2>
-				<p class="text-sm text-slate-500 dark:text-slate-400">
-					Kira nombor dengan pantas
+				<p class="text-slate-500 dark:text-slate-400 font-medium">
+					Kira nombor dengan pantas dan tepat.
 				</p>
 			</div>
 
-			<div class="card p-4">
+			<div class="card p-6 bg-slate-50/50 dark:bg-slate-800/50 border-2">
 				{/* Display */}
-				<div class="bg-slate-900 dark:bg-slate-950 rounded-xl p-4 mb-4 min-h-[100px] flex flex-col justify-end">
+				<div class="bg-white dark:bg-slate-950 rounded-2xl p-6 mb-6 min-h-[120px] flex flex-col justify-end border-2 border-slate-200 dark:border-slate-800 shadow-inner">
 					<Show when={expression()}>
-						<div class="text-sm text-slate-400 opacity-80 mb-1 truncate">
+						<div class="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2 opacity-80 truncate">
 							{expression()}
 						</div>
 					</Show>
-					<div class="text-4xl font-semibold text-white text-right tabular-nums">
+					<div class="text-5xl font-black text-slate-900 dark:text-white text-right tabular-nums font-mono tracking-tighter">
 						{display()}
 					</div>
 				</div>
 
 				{/* Buttons */}
-				<div class="grid grid-cols-4 gap-2">
+				<div class="grid grid-cols-4 gap-3">
 					{/* Row 1 */}
 					<button onClick={handleClear} class="calc-btn calc-btn-fn">
 						AC
 					</button>
 					<button onClick={handlePlusMinus} class="calc-btn calc-btn-fn">
-						+/−
+						±
 					</button>
 					<button onClick={handlePercent} class="calc-btn calc-btn-fn">
 						%
@@ -168,7 +168,7 @@ const QuickCalculator: Component = () => {
 					<button onClick={handleDecimal} class="calc-btn">.</button>
 					<button
 						onClick={handleEquals}
-						class="calc-btn calc-btn-equals"
+						class="calc-btn calc-btn-equals shadow-lg shadow-orange-500/20"
 					>
 						=
 					</button>

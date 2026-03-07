@@ -1,10 +1,11 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
 
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-	--font-sans: 'Inter', system-ui, sans-serif;
-	--font-mono: 'SF Mono', 'Fira Code', monospace;
+	--font-sans: 'Fira Sans', system-ui, sans-serif;
+	--font-mono: 'Fira Code', monospace;
 
 	--animate-fade-in: fadeIn 0.3s ease-out;
 	--animate-slide-up: slideUp 0.4s ease-out;
@@ -60,29 +61,31 @@
 
 @layer base {
 	:root {
-		--color-primary: #0f172a;
-		--color-secondary: #64748b;
-		--color-accent: #6366f1;
-		--color-accent-hover: #4f46e5;
+		--color-primary: #3b82f6;
+		--color-secondary: #60a5fa;
+		--color-accent: #f97316;
+		--color-accent-hover: #ea580c;
 		--color-success: #10b981;
 		--color-warning: #f59e0b;
 		--color-bg: #f8fafc;
 		--color-surface: #ffffff;
 		--color-border: #e2e8f0;
-		--color-muted: #f1f5f9;
+		--color-text: #1e293b;
+		--color-muted: #64748b;
 	}
 
 	.dark {
-		--color-primary: #f8fafc;
-		--color-secondary: #94a3b8;
-		--color-accent: #818cf8;
-		--color-accent-hover: #6366f1;
+		--color-primary: #60a5fa;
+		--color-secondary: #3b82f6;
+		--color-accent: #fb923c;
+		--color-accent-hover: #f97316;
 		--color-success: #34d399;
 		--color-warning: #fbbf24;
 		--color-bg: #0f172a;
 		--color-surface: #1e293b;
 		--color-border: #334155;
-		--color-muted: #1e293b;
+		--color-text: #f8fafc;
+		--color-muted: #94a3b8;
 	}
 
 	html {
@@ -101,23 +104,23 @@
 
 @layer components {
 	.card {
-		@apply bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 p-6 shadow-sm;
+		@apply bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-8 shadow-sm transition-all duration-200;
 	}
 
-	.card-hover {
-		@apply hover:shadow-md hover:-translate-y-0.5 transition-all duration-200;
+	.card-flat {
+		@apply bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-8;
 	}
 
 	.btn {
-		@apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+		@apply inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
 	}
 
 	.btn-primary {
-		@apply bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 active:scale-[0.96] focus:ring-slate-500;
+		@apply bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.98] focus:ring-blue-500;
 	}
 
 	.btn-accent {
-		@apply bg-indigo-500 text-white hover:bg-indigo-600 active:scale-[0.96] focus:ring-indigo-500 dark:bg-indigo-400 dark:hover:bg-indigo-500;
+		@apply bg-orange-500 text-white hover:bg-orange-600 active:scale-[0.98] focus:ring-orange-500;
 	}
 
 	.btn-ghost {
@@ -125,7 +128,7 @@
 	}
 
 	.input-field {
-		@apply w-full h-11 px-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-150;
+		@apply w-full h-12 px-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200;
 	}
 
 	.input-field.error {
@@ -133,63 +136,43 @@
 	}
 
 	.input-label {
-		@apply block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5;
-	}
-
-	.input-prefix {
-		@apply absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none;
-	}
-
-	.input-suffix {
-		@apply absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none;
-	}
-
-	.input-field.has-prefix {
-		@apply pl-11;
-	}
-
-	.input-field.has-suffix {
-		@apply pr-12;
+		@apply block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2;
 	}
 
 	.result-highlight {
-		@apply bg-slate-900 dark:bg-slate-700 text-white p-4 rounded-lg;
+		@apply bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 p-6 rounded-2xl;
 	}
 
 	.result-label {
-		@apply text-xs font-medium uppercase tracking-wider text-slate-400 dark:text-slate-400;
+		@apply text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400;
 	}
 
 	.result-value {
-		@apply text-2xl font-semibold tabular-nums;
-	}
-
-	.result-item {
-		@apply flex items-center justify-between py-3 border-b border-slate-100 dark:border-slate-700 last:border-0;
+		@apply text-3xl font-bold font-mono tabular-nums text-slate-900 dark:text-white;
 	}
 
 	.sidebar-link {
-		@apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200 transition-all duration-150;
+		@apply flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200 transition-all duration-200 cursor-pointer;
 	}
 
 	.sidebar-link.active {
-		@apply bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-medium;
+		@apply bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold;
 	}
 
 	.calc-btn {
-		@apply flex items-center justify-center h-11 text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600 active:scale-[0.95] transition-all duration-100;
+		@apply flex items-center justify-center h-14 text-lg font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl border border-transparent hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-[0.92] transition-all duration-150 cursor-pointer;
 	}
 
 	.calc-btn-operator {
-		@apply bg-indigo-500 text-white border-indigo-500 hover:bg-indigo-600 dark:bg-indigo-400 dark:border-indigo-400 dark:hover:bg-indigo-500;
+		@apply bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/60;
 	}
 
 	.calc-btn-equals {
-		@apply bg-emerald-500 text-white border-emerald-500 hover:bg-emerald-600;
+		@apply bg-orange-500 text-white hover:bg-orange-600;
 	}
 
 	.calc-btn-fn {
-		@apply bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300;
+		@apply bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300;
 	}
 
 	.category-badge {

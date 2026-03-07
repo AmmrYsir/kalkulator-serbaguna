@@ -17,7 +17,7 @@ import QuickCalculator from './components/calculators/QuickCalculator';
 
 const App: Component = () => {
   const [sidebarOpen, setSidebarOpen] = createSignal(false);
-  const [activeCalculator, setActiveCalculator] = createSignal<CalculatorType>('car-loan');
+  const [activeCalculator, setActiveCalculator] = createSignal<CalculatorType>('quick');
   const [touchStart, setTouchStart] = createSignal<number | null>(null);
 
   onMount(() => {
@@ -66,13 +66,13 @@ const App: Component = () => {
       case 'quick':
         return <QuickCalculator />;
       default:
-        return <CarLoanCalculator />;
+        return <QuickCalculator />;
     }
   };
 
   return (
     <DarkModeProvider>
-      <div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-200">
+      <div class="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
         <Header onMenuClick={() => setSidebarOpen(!sidebarOpen())} />
         
         <Sidebar
@@ -82,8 +82,8 @@ const App: Component = () => {
           onSelect={(type) => setActiveCalculator(type)}
         />
         
-        <main class="pt-20 pb-8 px-4 lg:pl-[280px]">
-          <div class="max-w-lg mx-auto animate-fade-in">
+        <main class="pt-24 pb-12 px-4 lg:pl-[300px] lg:pr-8">
+          <div class="max-w-xl mx-auto">
             <div class="animate-slide-up">
               {renderCalculator()}
             </div>

@@ -40,6 +40,12 @@ const unitData: Record<UnitType, Unit[]> = {
   ],
 };
 
+const RulerIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-600 dark:text-orange-400">
+    <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0Z"/><path d="m14.5 4.5 2 2"/><path d="m11.5 7.5 2 2"/><path d="m8.5 10.5 2 2"/><path d="m5.5 13.5 2 2"/>
+  </svg>
+);
+
 const UnitConverter: Component = () => {
   const [unitType, setUnitType] = createSignal<UnitType>('length');
   const [fromUnit, setFromUnit] = createSignal('m');
@@ -139,18 +145,23 @@ const UnitConverter: Component = () => {
   ];
 
   return (
-    <div class="max-w-md mx-auto">
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-1">
-          Penukar Unit
-        </h2>
-        <p class="text-sm text-slate-500 dark:text-slate-400">
-          Tukar antara pelbagai unit ukuran
-        </p>
+    <div class="max-w-xl mx-auto">
+      <div class="mb-8 flex items-center gap-4">
+        <div class="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-2xl">
+          <RulerIcon />
+        </div>
+        <div>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight font-mono uppercase">
+            PENUKAR UNIT
+          </h2>
+          <p class="text-slate-500 dark:text-slate-400 font-medium">
+            Tukar pelbagai jenis unit ukuran dengan mudah.
+          </p>
+        </div>
       </div>
 
       {/* Unit Type Selector */}
-      <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
+      <div class="flex gap-2 mb-6 overflow-x-auto pb-2 custom-scrollbar">
         <For each={unitTypes}>
           {(type) => (
             <button
@@ -162,10 +173,10 @@ const UnitConverter: Component = () => {
                 setInputValue('');
                 setResult('');
               }}
-              class={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-150 ${
+              class={`px-6 py-2.5 rounded-xl text-sm font-black font-mono tracking-widest uppercase transition-all duration-200 whitespace-nowrap ${
                 unitType() === type.id
-                  ? 'bg-amber-500 text-white'
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                  ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/20'
+                  : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
               }`}
             >
               {type.name}
@@ -174,63 +185,62 @@ const UnitConverter: Component = () => {
         </For>
       </div>
 
-      <div class="card space-y-4">
-        {/* From */}
-        <div>
-          <label class="input-label">Dari</label>
-          <div class="flex gap-2">
-            <input
-              type="number"
-              placeholder="0"
-              value={inputValue()}
-              onInput={(e) => setInputValue(e.currentTarget.value)}
-              class="input-field flex-1"
-            />
-            <select
-              value={fromUnit()}
-              onChange={(e) => setFromUnit(e.currentTarget.value)}
-              class="input-field w-28"
-            >
-              <For each={unitData[unitType()]}>
-                {(unit) => <option value={unit.id}>{unit.symbol}</option>}
-              </For>
-            </select>
-          </div>
-        </div>
-
-        {/* Swap Button */}
-        <div class="flex justify-center">
-          <button
-            onClick={swapUnits}
-            class="p-2 rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="17 1 21 5 17 9"/>
-              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-              <polyline points="7 23 3 19 7 15"/>
-              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-            </svg>
-          </button>
-        </div>
-
-        {/* To */}
-        <div>
-          <label class="input-label">Kepada</label>
-          <div class="flex gap-2">
-            <div class="input-field flex-1 bg-slate-50 dark:bg-slate-900 flex items-center">
-              <span class="text-slate-600 dark:text-slate-400 font-mono">
-                {result() || '0'}
-              </span>
+      <div class="card space-y-8">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+          {/* From */}
+          <div class="space-y-3">
+            <label class="input-label">Dari</label>
+            <div class="flex flex-col gap-2">
+              <input
+                type="number"
+                placeholder="0"
+                value={inputValue()}
+                onInput={(e) => setInputValue(e.currentTarget.value)}
+                class="input-field text-xl font-bold font-mono"
+              />
+              <select
+                value={fromUnit()}
+                onChange={(e) => setFromUnit(e.currentTarget.value)}
+                class="input-field bg-white dark:bg-slate-800 font-semibold"
+              >
+                <For each={unitData[unitType()]}>
+                  {(unit) => <option value={unit.id}>{unit.name} ({unit.symbol})</option>}
+                </For>
+              </select>
             </div>
-            <select
-              value={toUnit()}
-              onChange={(e) => setToUnit(e.currentTarget.value)}
-              class="input-field w-28"
+          </div>
+
+          {/* Swap Button */}
+          <div class="flex justify-center md:pt-8">
+            <button
+              onClick={swapUnits}
+              class="p-4 rounded-2xl bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-900/50 transition-all duration-200 active:scale-90 shadow-sm"
             >
-              <For each={unitData[unitType()]}>
-                {(unit) => <option value={unit.id}>{unit.symbol}</option>}
-              </For>
-            </select>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* To */}
+          <div class="space-y-3">
+            <label class="input-label">Kepada</label>
+            <div class="flex flex-col gap-2">
+              <div class="input-field flex items-center bg-orange-50 dark:bg-orange-900/20 border-orange-100 dark:border-orange-900/30">
+                <span class="text-xl font-black font-mono text-orange-600 dark:text-orange-400 tabular-nums">
+                  {result() || '0'}
+                </span>
+              </div>
+              <select
+                value={toUnit()}
+                onChange={(e) => setToUnit(e.currentTarget.value)}
+                class="input-field bg-white dark:bg-slate-800 font-semibold"
+              >
+                <For each={unitData[unitType()]}>
+                  {(unit) => <option value={unit.id}>{unit.name} ({unit.symbol})</option>}
+                </For>
+              </select>
+            </div>
           </div>
         </div>
       </div>

@@ -9,9 +9,9 @@ export type CalculatorType =
 interface Category {
   id: string;
   name: string;
-  icon: string;
+  icon: (props: any) => any;
   color: string;
-  items: { id: CalculatorType; name: string; nameMs: string }[];
+  items: { id: CalculatorType; name: string; nameMs: string; icon: (props: any) => any }[];
 }
 
 interface SidebarProps {
@@ -21,64 +21,73 @@ interface SidebarProps {
   onSelect: (type: CalculatorType) => void;
 }
 
+const FinanceIcon = (props: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" {...props}>
+    <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+  </svg>
+);
+
+const HealthIcon = (props: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" {...props}>
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+  </svg>
+);
+
+const ConverterIcon = (props: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" {...props}>
+    <polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><polyline points="8 3 3 3 3 8"/><line x1="3" y1="3" x2="9" y2="9"/>
+  </svg>
+);
+
+const QuickIcon = (props: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" {...props}>
+    <rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="16" y1="14" x2="16" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/>
+  </svg>
+);
+
 const categories: Category[] = [
   {
     id: 'finance',
     name: 'Finance',
-    icon: '💰',
-    color: 'indigo',
+    icon: FinanceIcon,
+    color: 'blue',
     items: [
-      { id: 'car-loan', name: 'Car Loan', nameMs: 'Pinjaman Kereta' },
-      { id: 'home-loan', name: 'Home Loan', nameMs: 'Pinjaman Rumah' },
-      { id: 'tip', name: 'Tip Calculator', nameMs: 'Kalkulator Tip' },
-      { id: 'salary', name: 'Salary', nameMs: 'Gaji' },
+      { id: 'car-loan', name: 'Car Loan', nameMs: 'Pinjaman Kereta', icon: QuickIcon },
+      { id: 'home-loan', name: 'Home Loan', nameMs: 'Pinjaman Rumah', icon: QuickIcon },
+      { id: 'tip', name: 'Tip Calculator', nameMs: 'Kalkulator Tip', icon: QuickIcon },
+      { id: 'salary', name: 'Salary', nameMs: 'Gaji', icon: QuickIcon },
     ],
   },
   {
     id: 'health',
     name: 'Health',
-    icon: '⚖️',
+    icon: HealthIcon,
     color: 'emerald',
     items: [
-      { id: 'bmi', name: 'BMI', nameMs: 'BMI' },
-      { id: 'bmr', name: 'BMR', nameMs: 'BMR' },
+      { id: 'bmi', name: 'BMI', nameMs: 'BMI', icon: QuickIcon },
+      { id: 'bmr', name: 'BMR', nameMs: 'BMR', icon: QuickIcon },
     ],
   },
   {
     id: 'converter',
     name: 'Converter',
-    icon: '📐',
-    color: 'amber',
+    icon: ConverterIcon,
+    color: 'orange',
     items: [
-      { id: 'unit', name: 'Unit Converter', nameMs: 'Penukar Unit' },
-      { id: 'currency', name: 'Currency', nameMs: 'Mata Wang' },
+      { id: 'unit', name: 'Unit Converter', nameMs: 'Penukar Unit', icon: QuickIcon },
+      { id: 'currency', name: 'Currency', nameMs: 'Mata Wang', icon: QuickIcon },
     ],
   },
   {
     id: 'quick',
     name: 'Quick',
-    icon: '🔢',
+    icon: QuickIcon,
     color: 'slate',
     items: [
-      { id: 'quick', name: 'Calculator', nameMs: 'Kalkulator' },
+      { id: 'quick', name: 'Calculator', nameMs: 'Kalkulator', icon: QuickIcon },
     ],
   },
 ];
-
-const CalculatorIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="4" y="2" width="16" height="20" rx="2"/>
-    <line x1="8" y1="6" x2="16" y2="6"/>
-    <line x1="16" y1="14" x2="16" y2="18"/>
-    <path d="M16 10h.01"/>
-    <path d="M12 10h.01"/>
-    <path d="M8 10h.01"/>
-    <path d="M12 14h.01"/>
-    <path d="M8 14h.01"/>
-    <path d="M8 18h.01"/>
-    <path d="M12 18h.01"/>
-  </svg>
-);
 
 const CloseIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -93,23 +102,23 @@ const Sidebar: Component<SidebarProps> = (props) => {
       {/* Mobile Overlay */}
       <Show when={props.isOpen}>
         <div 
-          class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-200"
+          class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
           onClick={props.onClose}
         />
       </Show>
 
       {/* Sidebar */}
       <aside
-        class={`fixed top-0 left-0 bottom-0 w-[280px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-50 lg:z-30 lg:top-16 lg:h-[calc(100vh-4rem)] transition-transform duration-300 ease-out ${
+        class={`fixed top-0 left-0 bottom-0 w-[280px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-50 lg:z-30 lg:top-16 lg:h-[calc(100vh-4rem)] transition-all duration-300 ease-in-out ${
           props.isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* Mobile Header */}
-        <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 lg:hidden">
-          <span class="font-semibold text-slate-900 dark:text-white">Menu</span>
+        <div class="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 lg:hidden">
+          <span class="font-bold text-slate-900 dark:text-white uppercase tracking-widest text-xs">Navigation</span>
           <button
             onClick={props.onClose}
-            class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Close menu"
           >
             <CloseIcon />
@@ -117,13 +126,13 @@ const Sidebar: Component<SidebarProps> = (props) => {
         </div>
 
         {/* Navigation */}
-        <nav class="p-3 space-y-6 overflow-y-auto lg:py-4">
+        <nav class="p-4 space-y-8 overflow-y-auto lg:py-6 h-full custom-scrollbar">
           <For each={categories}>
             {(category) => (
               <div>
-                <div class="flex items-center gap-2 px-3 mb-2">
-                  <span class="text-base">{category.icon}</span>
-                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                <div class="flex items-center gap-2 px-4 mb-3">
+                  <category.icon class="text-blue-600 dark:text-blue-400" />
+                  <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
                     {category.name}
                   </span>
                 </div>
@@ -135,14 +144,12 @@ const Sidebar: Component<SidebarProps> = (props) => {
                           props.onSelect(item.id);
                           props.onClose();
                         }}
-                        class={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all duration-150 ${
-                          props.activeCalculator === item.id
-                            ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-medium'
-                            : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'
+                        class={`w-full sidebar-link ${
+                          props.activeCalculator === item.id ? 'active' : ''
                         }`}
                       >
-                        <CalculatorIcon />
-                        <span class="text-sm">{item.name}</span>
+                        <item.icon width="16" height="16" />
+                        <span class="text-sm font-medium">{item.name}</span>
                       </button>
                     )}
                   </For>
@@ -157,3 +164,4 @@ const Sidebar: Component<SidebarProps> = (props) => {
 };
 
 export default Sidebar;
+

@@ -6,6 +6,12 @@ interface HomeLoanResult {
   totalRepayment: number;
 }
 
+const HomeIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-600 dark:text-emerald-400">
+    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+  </svg>
+);
+
 const HomeLoanCalculator: Component = () => {
   const [loanAmount, setLoanAmount] = createSignal('');
   const [interestRate, setInterestRate] = createSignal('');
@@ -67,117 +73,130 @@ const HomeLoanCalculator: Component = () => {
   };
 
   return (
-    <div class="max-w-md mx-auto">
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-1">
-          Pinjaman Rumah
-        </h2>
-        <p class="text-sm text-slate-500 dark:text-slate-400">
-          Kira ansuran bulanan untuk pinjaman rumah (reducing balance)
-        </p>
+    <div class="max-w-xl mx-auto">
+      <div class="mb-8 flex items-center gap-4">
+        <div class="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl">
+          <HomeIcon />
+        </div>
+        <div>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight font-mono uppercase">
+            PINJAMAN RUMAH
+          </h2>
+          <p class="text-slate-500 dark:text-slate-400 font-medium">
+            Kira ansuran bulanan untuk kediaman impian anda.
+          </p>
+        </div>
       </div>
 
-      <div class="card space-y-4">
-        <div>
-          <label class="input-label" for="home-loan-amount">
-            Harga Hartanah
-          </label>
-          <div class="relative">
-            <span class="input-prefix">RM</span>
-            <input
-              id="home-loan-amount"
-              type="text"
-              placeholder="300,000"
-              value={loanAmount()}
-              onInput={(e) => setLoanAmount(e.currentTarget.value)}
-              class="input-field has-prefix"
-            />
+      <div class="card space-y-6 border-emerald-100 dark:border-emerald-900/30">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="input-label" for="home-loan-amount">
+              Harga Hartanah / Jumlah Pinjaman
+            </label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold font-mono">RM</span>
+              <input
+                id="home-loan-amount"
+                type="text"
+                placeholder="300,000"
+                value={loanAmount()}
+                onInput={(e) => setLoanAmount(e.currentTarget.value)}
+                class="input-field pl-12 focus:ring-emerald-500"
+              />
+            </div>
+            <Show when={errors().loanAmount}>
+              <p class="text-xs font-bold text-red-500 mt-2 ml-1">{errors().loanAmount}</p>
+            </Show>
           </div>
-          <Show when={errors().loanAmount}>
-            <p class="text-xs text-red-500 mt-1">{errors().loanAmount}</p>
-          </Show>
+
+          <div>
+            <label class="input-label" for="home-interest-rate">
+              Kadar Faedah Tahunan
+            </label>
+            <div class="relative">
+              <input
+                id="home-interest-rate"
+                type="number"
+                step="0.1"
+                placeholder="4.5"
+                value={interestRate()}
+                onInput={(e) => setInterestRate(e.currentTarget.value)}
+                class="input-field pr-10 focus:ring-emerald-500"
+              />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold font-mono">%</span>
+            </div>
+            <Show when={errors().interestRate}>
+              <p class="text-xs font-bold text-red-500 mt-2 ml-1">{errors().interestRate}</p>
+            </Show>
+          </div>
+
+          <div>
+            <label class="input-label" for="home-loan-period">
+              Tempoh Pinjaman
+            </label>
+            <div class="relative">
+              <input
+                id="home-loan-period"
+                type="number"
+                placeholder="30"
+                value={loanPeriod()}
+                onInput={(e) => setLoanPeriod(e.currentTarget.value)}
+                class="input-field pr-16 focus:ring-emerald-500"
+              />
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs uppercase tracking-widest">tahun</span>
+            </div>
+            <Show when={errors().loanPeriod}>
+              <p class="text-xs font-bold text-red-500 mt-2 ml-1">{errors().loanPeriod}</p>
+            </Show>
+          </div>
         </div>
 
-        <div>
-          <label class="input-label" for="home-interest-rate">
-            Kadar Faedah Tahunan
-          </label>
-          <div class="relative">
-            <input
-              id="home-interest-rate"
-              type="number"
-              step="0.1"
-              placeholder="4.5"
-              value={interestRate()}
-              onInput={(e) => setInterestRate(e.currentTarget.value)}
-              class="input-field has-suffix"
-            />
-            <span class="input-suffix">%</span>
-          </div>
-          <Show when={errors().interestRate}>
-            <p class="text-xs text-red-500 mt-1">{errors().interestRate}</p>
-          </Show>
-        </div>
-
-        <div>
-          <label class="input-label" for="home-loan-period">
-            Tempoh Pinjaman
-          </label>
-          <div class="relative">
-            <input
-              id="home-loan-period"
-              type="number"
-              placeholder="30"
-              value={loanPeriod()}
-              onInput={(e) => setLoanPeriod(e.currentTarget.value)}
-              class="input-field has-suffix"
-            />
-            <span class="input-suffix">tahun</span>
-          </div>
-          <Show when={errors().loanPeriod}>
-            <p class="text-xs text-red-500 mt-1">{errors().loanPeriod}</p>
-          </Show>
-        </div>
-
-        <button onClick={calculate} class="btn btn-primary w-full mt-2">
-          Kira
+        <button onClick={calculate} class="btn bg-emerald-600 hover:bg-emerald-700 text-white w-full py-4 text-lg shadow-lg shadow-emerald-500/20">
+          Kira Sekarang
         </button>
       </div>
 
       <Show when={result()}>
-        <div class="mt-6 animate-slide-up">
-          <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">
-            Keputusan
-          </h3>
-          <div class="card border-emerald-200 dark:border-emerald-800">
-            <div class="result-highlight bg-emerald-600 dark:bg-emerald-700 rounded-lg mb-4">
-              <span class="result-label">Ansuran Bulanan</span>
-              <span class="result-value">
-                RM {result()!.monthlyInstallment.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
-              </span>
+        <div class="mt-8 animate-slide-up">
+          <div class="card bg-emerald-600 dark:bg-emerald-700 border-none overflow-hidden relative">
+            <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none text-white">
+              <HomeIcon />
             </div>
-            <div class="space-y-0">
-              <div class="result-item">
-                <span class="text-sm text-slate-600 dark:text-slate-400">Jumlah Faedah</span>
-                <span class="text-sm font-medium tabular-nums">
-                  RM {result()!.totalInterest.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
-                </span>
+            <div class="relative z-10">
+              <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-100/60 block mb-2">
+                ANGGARAN ANSURAN BULANAN
+              </span>
+              <div class="text-5xl font-black text-white font-mono tracking-tighter mb-6">
+                RM {result()!.monthlyInstallment.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
               </div>
-              <div class="result-item">
-                <span class="text-sm text-slate-600 dark:text-slate-400">Jumlah Pembayaran</span>
-                <span class="text-sm font-medium tabular-nums">
-                  RM {result()!.totalRepayment.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
-                </span>
+              
+              <div class="grid grid-cols-2 gap-4 pt-6 border-t border-white/10">
+                <div>
+                  <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-100/60 block mb-1">
+                    JUMLAH FAEDAH
+                  </span>
+                  <span class="text-lg font-bold text-white font-mono">
+                    RM {result()!.totalInterest.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+                <div>
+                  <span class="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-100/60 block mb-1">
+                    JUMLAH BAYARAN
+                  </span>
+                  <span class="text-lg font-bold text-white font-mono">
+                    RM {result()!.totalRepayment.toLocaleString('en-MY', { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </Show>
 
-      <div class="mt-6 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
-        <p class="text-xs text-slate-600 dark:text-slate-400">
-          <strong>Nota:</strong> Pengiraan berdasarkan kaedah reducing balance. 
-          Ansuran sebenar mungkin berbeza bergantung pada terms bank.
+      <div class="mt-8 p-6 bg-slate-100 dark:bg-slate-800/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700">
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
+          <strong>Nota:</strong> Pengiraan berdasarkan kaedah baki berkurangan (reducing balance). Ansuran sebenar mungkin berbeza bergantung kepada terma dan syarat bank.
         </p>
       </div>
     </div>

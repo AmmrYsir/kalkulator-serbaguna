@@ -22,6 +22,12 @@ const currencies: Currency[] = [
   { code: 'INR', name: 'Indian Rupee', symbol: '₹', rate: 83.1 },
 ];
 
+const CoinsIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-600 dark:text-orange-400">
+    <circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18.06"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82" />
+  </svg>
+);
+
 const CurrencyConverter: Component = () => {
   const [fromCurrency, setFromCurrency] = createSignal<Currency>(currencies[0]);
   const [toCurrency, setToCurrency] = createSignal<Currency>(currencies[3]);
@@ -59,95 +65,98 @@ const CurrencyConverter: Component = () => {
   };
 
   return (
-    <div class="max-w-md mx-auto">
-      <div class="mb-6">
-        <h2 class="text-xl font-semibold text-slate-900 dark:text-white mb-1">
-          Penukar Mata Wang
-        </h2>
-        <p class="text-sm text-slate-500 dark:text-slate-400">
-          Tukar antara matawang (kadar tetap)
-        </p>
+    <div class="max-w-xl mx-auto">
+      <div class="mb-8 flex items-center gap-4">
+        <div class="p-3 bg-orange-100 dark:bg-orange-900/30 rounded-2xl">
+          <CoinsIcon />
+        </div>
+        <div>
+          <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight font-mono uppercase">
+            MATA WANG
+          </h2>
+          <p class="text-slate-500 dark:text-slate-400 font-medium">
+            Tukar mata wang dengan kadar rujukan tetap.
+          </p>
+        </div>
       </div>
 
-      <div class="card space-y-4">
-        {/* From */}
-        <div>
-          <label class="input-label">Dari</label>
-          <div class="flex gap-2">
-            <input
-              type="number"
-              placeholder="0"
-              value={amount()}
-              onInput={(e) => setAmount(e.currentTarget.value)}
-              class="input-field flex-1"
-            />
-            <select
-              value={fromCurrency().code}
-              onChange={(e) => {
-                const curr = currencies.find(c => c.code === e.currentTarget.value);
-                if (curr) setFromCurrency(curr);
-              }}
-              class="input-field w-36"
-            >
-              <For each={currencies}>
-                {(currency) => (
-                  <option value={currency.code}>
-                    {currency.code} ({currency.symbol})
-                  </option>
-                )}
-              </For>
-            </select>
-          </div>
-        </div>
-
-        {/* Swap Button */}
-        <div class="flex justify-center">
-          <button
-            onClick={swapCurrencies}
-            class="p-2 rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="17 1 21 5 17 9"/>
-              <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
-              <polyline points="7 23 3 19 7 15"/>
-              <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
-            </svg>
-          </button>
-        </div>
-
-        {/* To */}
-        <div>
-          <label class="input-label">Kepada</label>
-          <div class="flex gap-2">
-            <div class="input-field flex-1 bg-slate-50 dark:bg-slate-900 flex items-center">
-              <span class="text-slate-600 dark:text-slate-400 font-mono">
-                {toCurrency().symbol} {result() || '0.00'}
-              </span>
+      <div class="card space-y-8">
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+          {/* From */}
+          <div class="space-y-3">
+            <label class="input-label">Dari</label>
+            <div class="flex flex-col gap-2">
+              <input
+                type="number"
+                placeholder="0.00"
+                value={amount()}
+                onInput={(e) => setAmount(e.currentTarget.value)}
+                class="input-field text-xl font-bold font-mono"
+              />
+              <select
+                value={fromCurrency().code}
+                onChange={(e) => {
+                  const curr = currencies.find(c => c.code === e.currentTarget.value);
+                  if (curr) setFromCurrency(curr);
+                }}
+                class="input-field bg-white dark:bg-slate-800 font-semibold"
+              >
+                <For each={currencies}>
+                  {(currency) => (
+                    <option value={currency.code}>
+                      {currency.code} - {currency.name}
+                    </option>
+                  )}
+                </For>
+              </select>
             </div>
-            <select
-              value={toCurrency().code}
-              onChange={(e) => {
-                const curr = currencies.find(c => c.code === e.currentTarget.value);
-                if (curr) setToCurrency(curr);
-              }}
-              class="input-field w-36"
+          </div>
+
+          {/* Swap Button */}
+          <div class="flex justify-center md:pt-8">
+            <button
+              onClick={swapCurrencies}
+              class="p-4 rounded-2xl bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 hover:bg-orange-200 dark:hover:bg-orange-900/50 transition-all duration-200 active:scale-90 shadow-sm"
             >
-              <For each={currencies}>
-                {(currency) => (
-                  <option value={currency.code}>
-                    {currency.code} ({currency.symbol})
-                  </option>
-                )}
-              </For>
-            </select>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+              </svg>
+            </button>
+          </div>
+
+          {/* To */}
+          <div class="space-y-3">
+            <label class="input-label">Kepada</label>
+            <div class="flex flex-col gap-2">
+              <div class="input-field flex items-center bg-orange-50 dark:bg-orange-900/20 border-orange-100 dark:border-orange-900/30">
+                <span class="text-xl font-black font-mono text-orange-600 dark:text-orange-400 tabular-nums">
+                  {toCurrency().symbol} {result() || '0.00'}
+                </span>
+              </div>
+              <select
+                value={toCurrency().code}
+                onChange={(e) => {
+                  const curr = currencies.find(c => c.code === e.currentTarget.value);
+                  if (curr) setToCurrency(curr);
+                }}
+                class="input-field bg-white dark:bg-slate-800 font-semibold"
+              >
+                <For each={currencies}>
+                  {(currency) => (
+                    <option value={currency.code}>
+                      {currency.code} - {currency.name}
+                    </option>
+                  )}
+                </For>
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="mt-6 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-        <p class="text-xs text-amber-700 dark:text-amber-400">
-          <strong>Nota:</strong> Kadar pertukaran adalah kadar tetap dan mungkin tidak mencerminkan kadar semasa. 
-          Gunakan sebagai rujukan sahaja.
+      <div class="mt-8 p-6 bg-orange-50 dark:bg-orange-900/20 rounded-2xl border-2 border-dashed border-orange-100 dark:border-orange-900/30">
+        <p class="text-sm text-orange-700 dark:text-orange-400 leading-relaxed italic">
+          <strong>Nota:</strong> Kadar pertukaran adalah kadar tetap rujukan dan mungkin tidak mencerminkan kadar pasaran semasa yang sentiasa berubah.
         </p>
       </div>
     </div>
